@@ -5,13 +5,12 @@
 
 import { render } from "@testing-library/react";
 import type { RenderResult } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import assert from "assert";
 import React from "react";
 import { computeNextPosition, RectangleDimensions } from "./helpers";
 import { Tooltip, TooltipPosition } from "./tooltip";
 import '@testing-library/jest-dom'
-import {UserEvent} from "@testing-library/user-event/setup/setup";
 
 const getRectangle = (parts: Omit<RectangleDimensions, "width" | "height">): RectangleDimensions => {
   assert(parts.right >= parts.left);
