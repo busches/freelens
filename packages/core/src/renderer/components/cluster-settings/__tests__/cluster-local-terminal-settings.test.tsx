@@ -6,7 +6,8 @@
 import React from "react";
 import { waitFor } from "@testing-library/react";
 import { ClusterLocalTerminalSetting } from "../local-terminal-settings";
-import userEvent, { UserEvent } from "@testing-library/user-event";
+import type { UserEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import type { Stats } from "fs";
 import { Cluster } from "../../../../common/cluster/cluster";
 import { getDiForUnitTesting } from "../../../getDiForUnitTesting";

@@ -6,7 +6,8 @@
 import React from "react";
 import { ClusterRoleBindingDialog } from "../dialog/view";
 import { ClusterRole } from "@freelensapp/kube-object";
-import userEvent, { UserEvent } from "@testing-library/user-event";
+import type { UserEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import { getDiForUnitTesting } from "../../../../getDiForUnitTesting";
 import type { DiRender } from "../../../test-utils/renderFor";
 import { renderFor } from "../../../test-utils/renderFor";

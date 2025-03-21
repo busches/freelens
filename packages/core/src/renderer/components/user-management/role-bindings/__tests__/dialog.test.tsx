@@ -3,7 +3,8 @@
  * Licensed under MIT License. See LICENSE in root directory for more information.
  */
 
-import userEvent, { UserEvent } from "@testing-library/user-event";
+import type { UserEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { ClusterRole } from "@freelensapp/kube-object";
 import { RoleBindingDialog } from "../dialog/view";

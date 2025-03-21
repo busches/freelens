@@ -30,7 +30,6 @@ import { getDiForUnitTesting as getRendererDi } from "../../getDiForUnitTesting"
 import { getDiForUnitTesting as getMainDi } from "../../../main/getDiForUnitTesting";
 import assert from "assert";
 import { openMenu } from "react-select-event";
-import userEvent from "@testing-library/user-event";
 import lensProxyPortInjectable from "../../../main/lens-proxy/lens-proxy-port.injectable";
 import type { Route } from "../../../common/front-end-routing/front-end-route-injection-token";
 import type { NavigateToRouteOptions } from "../../../common/front-end-routing/navigate-to-route-injection-token";
@@ -866,7 +865,7 @@ const selectOptionFor = (builder: ApplicationBuilder, menuId: string) => (labelT
 
   assert(option, `Could not find select option with label "${labelText}" for menu with ID "${menuId}"`);
 
-  userEvent.click(option);
+  fireEvent.click(option);
 };
 
 function enableExtensionFor(di: DiContainer, stateInjectable: Injectable<ObservableMap<string, any>, any, any>) {
