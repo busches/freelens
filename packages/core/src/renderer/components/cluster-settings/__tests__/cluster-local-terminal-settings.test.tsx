@@ -6,7 +6,7 @@
 import React from "react";
 import { waitFor } from "@testing-library/react";
 import { ClusterLocalTerminalSetting } from "../local-terminal-settings";
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import type { Stats } from "fs";
 import { Cluster } from "../../../../common/cluster/cluster";
 import { getDiForUnitTesting } from "../../../getDiForUnitTesting";
@@ -21,6 +21,7 @@ describe("ClusterLocalTerminalSettings", () => {
   let showErrorNotificationMock: jest.Mock;
   let statMock: jest.Mock;
   let loadKubeconfigMock: jest.Mock;
+  let user: UserEvent;
 
   beforeEach(() => {
     const di = getDiForUnitTesting();
@@ -40,6 +41,8 @@ describe("ClusterLocalTerminalSettings", () => {
     di.override(loadKubeconfigInjectable, () => loadKubeconfigMock);
 
     render = renderFor(di);
+
+    user = userEvent.setup();
   });
 
   it("should render the current settings", async () => {
@@ -99,9 +102,9 @@ describe("ClusterLocalTerminalSettings", () => {
     const dom = render(<ClusterLocalTerminalSetting cluster={cluster}/>);
     const dn = await dom.findByTestId("default-namespace");
 
-    userEvent.click(dn);
-    userEvent.type(dn, "kube-system");
-    userEvent.click(dom.baseElement);
+    await user.click(dn);
+    await user.type(dn, "kube-system");
+    await user.click(dom.baseElement);
 
     await waitFor(() => expect(cluster.preferences.defaultNamespace).toBe("kube-system"));
   });
@@ -128,9 +131,9 @@ describe("ClusterLocalTerminalSettings", () => {
     const dom = render(<ClusterLocalTerminalSetting cluster={cluster}/>);
     const dn = await dom.findByTestId("working-directory");
 
-    userEvent.click(dn);
-    userEvent.type(dn, "/foobar");
-    userEvent.click(dom.baseElement);
+    await user.click(dn);
+    await user.type(dn, "/foobar");
+    await user.click(dom.baseElement);
 
     await waitFor(() => expect(cluster.preferences?.terminalCWD).toBe("/foobar"));
   });
@@ -158,9 +161,9 @@ describe("ClusterLocalTerminalSettings", () => {
     const dom = render(<ClusterLocalTerminalSetting cluster={cluster}/>);
     const dn = await dom.findByTestId("working-directory");
 
-    userEvent.click(dn);
-    userEvent.type(dn, "/foobar");
-    userEvent.click(dom.baseElement);
+    await user.click(dn);
+    await user.type(dn, "/foobar");
+    await user.click(dom.baseElement);
 
     await waitFor(() => expect(showErrorNotificationMock).toHaveBeenCalled());
   });

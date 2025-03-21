@@ -7,7 +7,7 @@ import type { RenderResult } from "@testing-library/react";
 import { screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { KubeObject } from "@freelensapp/kube-object";
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import { getInjectable } from "@ogre-tools/injectable";
 import type { DiContainer } from "@ogre-tools/injectable";
 import { ConfirmDialog } from "../confirm-dialog";
@@ -35,6 +35,7 @@ import activeEntityIdInjectable from "../../api/catalog/entity/active-entity-id.
 describe("kube-object-menu", () => {
   let di: DiContainer;
   let render: DiRender;
+  let user: UserEvent;
 
   beforeEach(() => {
     di = getDiForUnitTesting();
@@ -71,6 +72,8 @@ describe("kube-object-menu", () => {
     di.override(hideDetailsInjectable, () => () => {});
 
     di.override(createEditResourceTabInjectable, () => () => "irrelevant");
+
+    user = userEvent.setup();
   });
 
   it("given no cluster, does not crash", () => {
@@ -165,7 +168,7 @@ describe("kube-object-menu", () => {
 
       describe("when removing new kube object", () => {
         beforeEach(async () => {
-          userEvent.click(await screen.findByTestId("menu-action-delete-for-/some-other-api-version/some-other-kind/some-other-namespace/some-other-name"));
+          await user.click(await screen.findByTestId("menu-action-delete-for-/some-other-api-version/some-other-kind/some-other-namespace/some-other-name"));
         });
 
         it("renders", async () => {
@@ -177,7 +180,7 @@ describe("kube-object-menu", () => {
 
     describe("when removing kube object", () => {
       beforeEach(async () => {
-        userEvent.click(await screen.findByTestId("menu-action-delete-for-/foo"));
+        await user.click(await screen.findByTestId("menu-action-delete-for-/foo"));
       });
 
       it("renders", async () => {
@@ -189,7 +192,7 @@ describe("kube-object-menu", () => {
         beforeEach(async () => {
           const confirmRemovalButton = await screen.findByTestId("confirm");
 
-          userEvent.click(confirmRemovalButton);
+          await user.click(confirmRemovalButton);
         });
 
         it("calls for removal of the kube object", () => {
@@ -242,7 +245,7 @@ describe("kube-object-menu", () => {
     it("when removing kube object, renders confirmation dialog with namespace", async () => {
       const menuItem = await screen.findByTestId("menu-action-delete-for-/foo");
 
-      userEvent.click(menuItem);
+      await user.click(menuItem);
 
       expect(baseElement).toMatchSnapshot();
     });
@@ -280,7 +283,7 @@ describe("kube-object-menu", () => {
     it("when removing kube object, renders confirmation dialog without namespace", async () => {
       const menuItem = await screen.findByTestId("menu-action-delete-for-/foo");
 
-      userEvent.click(menuItem);
+      await user.click(menuItem);
 
       expect(baseElement).toMatchSnapshot();
     });

@@ -16,7 +16,7 @@ import callForLogsInjectable from "../call-for-logs.injectable";
 import type { LogTabViewModelDependencies } from "../logs-view-model";
 import { LogTabViewModel } from "../logs-view-model";
 import type { TabId } from "../../dock/store";
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import { SearchStore } from "../../../../search-store/search-store";
 import assert from "assert";
 import fsInjectable from "../../../../../common/fs/fs.injectable";
@@ -105,6 +105,7 @@ const getFewPodsTabData = (tabId: TabId, deps: Partial<LogTabViewModelDependenci
 
 describe("<LogResourceSelector />", () => {
   let render: DiRender;
+  let user: UserEvent;
 
   beforeEach(() => {
     const di = getDiForUnitTesting();
@@ -117,6 +118,8 @@ describe("<LogResourceSelector />", () => {
     render = renderFor(di);
 
     ensureDirSync("/tmp");
+
+    user = userEvent.setup();
   });
 
   describe("with one pod", () => {
@@ -195,7 +198,7 @@ describe("<LogResourceSelector />", () => {
       assert(selector);
 
       selectEvent.openMenu(selector);
-      userEvent.click(await findByText("deploymentPod2", { selector: ".pod-selector-menu .Select__option" }));
+      await user.click(await findByText("deploymentPod2", { selector: ".pod-selector-menu .Select__option" }));
       expect(renameTab).toBeCalledWith("foobar", "Pod deploymentPod2");
     });
   });

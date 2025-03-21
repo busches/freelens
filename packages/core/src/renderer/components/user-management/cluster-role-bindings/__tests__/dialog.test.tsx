@@ -6,7 +6,7 @@
 import React from "react";
 import { ClusterRoleBindingDialog } from "../dialog/view";
 import { ClusterRole } from "@freelensapp/kube-object";
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import { getDiForUnitTesting } from "../../../../getDiForUnitTesting";
 import type { DiRender } from "../../../test-utils/renderFor";
 import { renderFor } from "../../../test-utils/renderFor";
@@ -25,6 +25,7 @@ describe("ClusterRoleBindingDialog tests", () => {
   let render: DiRender;
   let closeClusterRoleBindingDialog: CloseClusterRoleBindingDialog;
   let openClusterRoleBindingDialog: OpenClusterRoleBindingDialog;
+  let user: UserEvent;
 
   beforeEach(() => {
     const di = getDiForUnitTesting();
@@ -58,6 +59,8 @@ describe("ClusterRoleBindingDialog tests", () => {
         },
       }),
     ]);
+
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -75,7 +78,7 @@ describe("ClusterRoleBindingDialog tests", () => {
     openClusterRoleBindingDialog();
     const res = render(<ClusterRoleBindingDialog />);
 
-    userEvent.keyboard("a");
+    await user.keyboard("a");
     await res.findAllByText("foobar");
   });
 });

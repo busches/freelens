@@ -3,7 +3,7 @@
  * Licensed under MIT License. See LICENSE in root directory for more information.
  */
 
-import userEvent from "@testing-library/user-event";
+import userEvent, { UserEvent } from "@testing-library/user-event";
 import React from "react";
 import { ClusterRole } from "@freelensapp/kube-object";
 import { RoleBindingDialog } from "../dialog/view";
@@ -22,6 +22,7 @@ import { Cluster } from "../../../../../common/cluster/cluster";
 describe("RoleBindingDialog tests", () => {
   let render: DiRender;
   let openRoleBindingDialog: OpenRoleBindingDialog;
+  let user: UserEvent;
 
   beforeEach(() => {
     const di = getDiForUnitTesting();
@@ -54,6 +55,8 @@ describe("RoleBindingDialog tests", () => {
         },
       }),
     ]);
+
+    user = userEvent.setup();
   });
 
   it("should render without any errors", () => {
@@ -66,7 +69,7 @@ describe("RoleBindingDialog tests", () => {
     openRoleBindingDialog();
     const res = render(<RoleBindingDialog />);
 
-    userEvent.click(await res.findByText("Select role", { exact: false }));
+    await user.click(await res.findByText("Select role", { exact: false }));
 
     await res.findAllByText("foobar", {
       exact: false,
