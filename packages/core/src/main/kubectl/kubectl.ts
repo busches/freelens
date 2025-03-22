@@ -112,14 +112,14 @@ export class Kubectl {
     }
 
     // return binary name if bundled path is not functional
-    if (!await this.checkBinary(this.getBundledPath(), false)) {
+    if (!(await this.checkBinary(this.getBundledPath(), false))) {
       Kubectl.invalidBundle = true;
 
       return this.dependencies.getBasenameOfPath(this.getBundledPath());
     }
 
     try {
-      if (!await this.ensureKubectl()) {
+      if (!(await this.ensureKubectl())) {
         this.dependencies.logger.error("Failed to ensure kubectl, fallback to the bundled version");
 
         return this.getBundledPath();

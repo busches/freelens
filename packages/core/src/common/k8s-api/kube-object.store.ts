@@ -195,7 +195,7 @@ export class KubeObjectStore<
 
       if (onLoadFailure) {
         try {
-          return await res ?? [];
+          return (await res) ?? [];
         } catch (error) {
           onLoadFailure(new Error(`Failed to load ${this.api.apiBase}`, { cause: error }));
 
@@ -207,7 +207,7 @@ export class KubeObjectStore<
         }
       }
 
-      return await res ?? [];
+      return (await res) ?? [];
     }
 
     this.loadedNamespaces.set(namespaces);
@@ -220,7 +220,7 @@ export class KubeObjectStore<
     for (const result of results) {
       switch (result.status) {
         case "fulfilled":
-          res.push(...result.value ?? []);
+          res.push(...(result.value ?? []));
           break;
 
         case "rejected":

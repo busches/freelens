@@ -16,7 +16,7 @@ const isPathInjectable = getInjectable({
       debounce: 100,
       condition: ({ type }) => type === "text",
       validate: async value => {
-        if (!await pathExists(value)) {
+        if (!(await pathExists(value))) {
           throw new Error(`"${value}" is not a valid file path`);
         }
       },

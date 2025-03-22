@@ -5,16 +5,27 @@
 import { getInjectable } from "@ogre-tools/injectable";
 import React from "react";
 import { reactApplicationHigherOrderComponentInjectionToken } from "@freelensapp/react-application";
-import { ThemeProvider } from "@material-ui/core";
+import type { Theme} from "@mui/material";
+import { ThemeProvider, StyledEngineProvider } from "@mui/material";
 import { defaultMuiBaseTheme } from "../mui-base-theme";
+
+
+declare module "@mui/styles/defaultTheme" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
 
 const themeProviderReactApplicationHocInjectable = getInjectable({
   id: "theme-provider-react-application-hoc",
 
   instantiate:
     () =>
-      ({ children }) =>
-        <ThemeProvider theme={defaultMuiBaseTheme}>{children}</ThemeProvider>,
+      ({ children }) => (
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={defaultMuiBaseTheme}>{children}</ThemeProvider>
+        </StyledEngineProvider>
+      ),
 
   injectionToken: reactApplicationHigherOrderComponentInjectionToken,
 });

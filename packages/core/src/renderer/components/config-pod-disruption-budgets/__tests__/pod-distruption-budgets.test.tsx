@@ -35,17 +35,18 @@ describe("<PodDisruptionBudgets />", () => {
     spec,
   });
 
-  const getPodDisruptionBudgetStoreInjectableMock = (pdb: PodDisruptionBudget) => ({
+  const getPodDisruptionBudgetStoreInjectableMock = (pdb: PodDisruptionBudget) => (({
     api: {
       kind: "PodDisruptionBudget",
     },
+
     getByPath: () => pdb,
     getTotalCount: () => 1,
     contextItems: [pdb],
     pickOnlySelected: (items: any[]) => items,
     isSelectedAll: () => false,
-    isSelected: () => true,
-  }) as any;
+    isSelected: () => true
+  }) as any);
 
   beforeEach(() => {
     di = getDiForUnitTesting();
@@ -56,9 +57,9 @@ describe("<PodDisruptionBudgets />", () => {
       kubeConfigPath: "/some-path-to-a-kubeconfig",
     }));
     di.override(storesAndApisCanBeCreatedInjectable, () => true);
-    di.override(selectedNamespacesStorageInjectable, () => ({
-      get: () => ({}),
-    }) as any);
+    di.override(selectedNamespacesStorageInjectable, () => (({
+      get: () => ({})
+    }) as any));
     di.override(loggerInjectionToken, () => null);
     di.override(maybeKubeApiInjectable, () => ({}));
     di.override(siblingTabsInjectable, () => ({ get: () => [] } as any));

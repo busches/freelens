@@ -32,7 +32,7 @@ const currentKubeObjectInDetailsInjectable = getInjectable({
         }
 
         try {
-          const object = store.getByPath(path) ?? await store.loadFromPath(path);
+          const object = store.getByPath(path) ?? (await store.loadFromPath(path));
 
           return { object };
         } catch (error) {

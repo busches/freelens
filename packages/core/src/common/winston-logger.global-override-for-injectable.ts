@@ -8,16 +8,15 @@ import { getGlobalOverride } from "@freelensapp/test-utils";
 import { noop } from "@freelensapp/utilities";
 import { winstonLoggerInjectable } from "@freelensapp/logger";
 
-export default getGlobalOverride(winstonLoggerInjectable, () => ({
+export default getGlobalOverride(winstonLoggerInjectable, () => (({
   log: noop,
   add: noop,
   remove: noop,
   clear: noop,
   close: noop,
-
   warn: noop,
   debug: noop,
   error: noop,
   info: noop,
-  silly: noop,
-}) as winston.Logger);
+  silly: noop
+}) as winston.Logger));

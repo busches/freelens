@@ -343,7 +343,7 @@ export class ExtensionDiscovery {
       const isEnabled = this.dependencies.isExtensionEnabled(id);
       const extensionDir = this.dependencies.getDirnameOfPath(manifestPath);
       const npmPackage = this.dependencies.joinPaths(extensionDir, `${manifest.name}-${manifest.version}.tgz`);
-      const absolutePath = this.dependencies.isProduction && await this.dependencies.pathExists(npmPackage)
+      const absolutePath = this.dependencies.isProduction && (await this.dependencies.pathExists(npmPackage))
         ? npmPackage
         : extensionDir;
       const isCompatible = this.dependencies.isCompatibleExtension(manifest);

@@ -23,7 +23,7 @@ const kubeApiUpgradeRequestInjectable = getInjectable({
     const kubeAuthProxyServer = di.inject(kubeAuthProxyServerInjectable, cluster);
     const kubeAuthProxyCertificate = di.inject(kubeAuthProxyCertificateInjectable, clusterApiUrl.hostname);
 
-    const proxyUrl = await kubeAuthProxyServer.ensureAuthProxyUrl() + req.url.replace(apiKubePrefix, "");
+    const proxyUrl = (await kubeAuthProxyServer.ensureAuthProxyUrl()) + req.url.replace(apiKubePrefix, "");
     const pUrl = url.parse(proxyUrl);
     const connectOpts: ConnectionOptions = {
       port: pUrl.port ? parseInt(pUrl.port) : undefined,

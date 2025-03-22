@@ -196,7 +196,7 @@ export const isPath = asyncInputValidator({
   debounce: 100,
   condition: ({ type }) => type === "text",
   validate: async value => {
-    if (!await fse.pathExists(value)) {
+    if (!(await fse.pathExists(value))) {
       throw new Error(`"${value}" is not a valid file path`);
     }
   },
