@@ -4,9 +4,17 @@
  */
 
 import React from "react";
-import { createTheme, ThemeProvider } from "@material-ui/core";
+import type { Theme} from "@mui/material";
+import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from "@mui/material";
 
-export const defaultMuiBaseTheme = createTheme({
+
+declare module "@mui/styles/defaultTheme" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
+}
+
+
+export const defaultMuiBaseTheme = createTheme(adaptV4Theme({
   props: {
     MuiIconButton: {
       color: "inherit",
@@ -28,12 +36,16 @@ export const defaultMuiBaseTheme = createTheme({
       },
     },
   },
-});
+}));
 
 export function DefaultProps(App: React.ComponentType | React.FunctionComponent) {
   return (
-    <ThemeProvider theme= { defaultMuiBaseTheme } >
-      <App />
-    </ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      (
+      <ThemeProvider theme= { defaultMuiBaseTheme } >
+        <App />
+      </ThemeProvider>
+      )
+    </StyledEngineProvider>
   );
 }
