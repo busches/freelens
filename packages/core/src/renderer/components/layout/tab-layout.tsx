@@ -80,7 +80,7 @@ const NonInjectedTabLayout = observer((props: TabLayoutProps & Dependencies) => 
                   component={component}
                 />
               ))}
-              {startTabUrl && <Redirect to={startTabUrl}/>}
+              {startTabUrl && <Route path="/" render={() => <Redirect to={startTabUrl}/>} />}
             </Switch>
           )}
           {children}
