@@ -182,7 +182,7 @@ class NonInjectedTable<Item extends ItemObject> extends React.Component<TablePro
           const title = elem.props.title || (
             // copy cell content to title if it's a string
             // usable if part of TableCell's content is hidden when there is not enough space
-            typeof elem.props.children === "string" ? elem.props.children : undefined
+            (typeof elem.props.children === "string" ? elem.props.children : undefined)
           );
 
           return React.cloneElement(elem, {

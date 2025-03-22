@@ -442,12 +442,14 @@ export class Input extends React.Component<InputProps, State> {
       tooltipProps.className = cssNames("InputTooltipError", tooltipProps.className);
       tooltipError = (
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        <Tooltip targetId={componentId!} {...tooltipProps}>
-          <div className="flex gaps align-center">
-            <Icon material="error_outline" />
-            {errorsInfo}
-          </div>
-        </Tooltip>
+        (
+          <Tooltip targetId={componentId!} {...tooltipProps}>
+            <div className="flex gaps align-center">
+              <Icon material="error_outline" />
+              {errorsInfo}
+            </div>
+          </Tooltip>
+        )
       );
     }
 
