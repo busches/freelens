@@ -268,7 +268,6 @@
     "@hapi/subtext": "^8.1.0",
     "@mui/lab": "^5.0.0-alpha.142",
     "@mui/material": "^5.17.1",
-    "@mui/styles": "^5.17.1",
     "@ogre-tools/fp": "^17.11.1",
     "@ogre-tools/injectable": "^17.11.1",
     "@ogre-tools/injectable-extension-for-auto-registration": "^17.11.1",
