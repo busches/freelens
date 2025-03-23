@@ -4,13 +4,7 @@
  */
 
 import React from "react";
-import type { Theme} from "@mui/material";
 import { createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material";
-
-declare module "@mui/styles/defaultTheme" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
-}
 
 export const defaultMuiBaseTheme = createTheme({
   components: {
