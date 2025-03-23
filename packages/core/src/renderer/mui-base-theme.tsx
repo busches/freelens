@@ -5,38 +5,40 @@
 
 import React from "react";
 import type { Theme} from "@mui/material";
-import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from "@mui/material";
-
+import { createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material";
 
 declare module "@mui/styles/defaultTheme" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface DefaultTheme extends Theme {}
 }
 
-
-export const defaultMuiBaseTheme = createTheme(adaptV4Theme({
-  props: {
+export const defaultMuiBaseTheme = createTheme({
+  components: {
     MuiIconButton: {
-      color: "inherit",
+      defaultProps: {
+        color: "inherit",
+      },
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            color: "var(--iconActiveColor)",
+            backgroundColor: "var(--iconActiveBackground)",
+          },
+        }
+      }
     },
     MuiSvgIcon: {
-      fontSize: "inherit",
+      defaultProps: {
+        fontSize: "inherit",
+      }
     },
     MuiTooltip: {
-      placement: "top",
+      defaultProps: {
+        placement: "top",
+      }
     },
   },
-  overrides: {
-    MuiIconButton: {
-      root: {
-        "&:hover": {
-          color: "var(--iconActiveColor)",
-          backgroundColor: "var(--iconActiveBackground)",
-        },
-      },
-    },
-  },
-}));
+});
 
 export function DefaultProps(App: React.ComponentType | React.FunctionComponent) {
   return (
