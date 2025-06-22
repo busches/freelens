@@ -2,6 +2,8 @@ packages:
   - freelens
   - packages/**
 
+nodeGyp: ../../../../node-gyp/bin/node-gyp.js
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - core-js-pure
@@ -11,6 +13,7 @@ onlyBuiltDependencies:
   - node-pty
   - playwright
   - sharp
+  - unrs-resolver
   - win-ca
 
 overrides:
@@ -24,7 +27,5 @@ patchedDependencies:
 
 publicHoistPattern:
   - node-gyp
-
-nodeGyp: ../../../../node-gyp/bin/node-gyp.js
 
 shellEmulator: true

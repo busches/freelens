@@ -6,37 +6,42 @@
 
 import "./item-list-layout.scss";
 
-import type { ItemObject, TableCellProps } from "@freelensapp/list-layout";
-import type { IClassName, SingleOrMany, StrictReactNode } from "@freelensapp/utilities";
 import { cssNames, noop } from "@freelensapp/utilities";
 import { withInjectables } from "@ogre-tools/injectable-react";
 import autoBindReact from "auto-bind/react";
 import groupBy from "lodash/groupBy";
-import type { IComputedValue } from "mobx";
 import { computed, makeObservable, untracked } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import type { Primitive } from "type-fest";
 import selectedFilterNamespacesInjectable from "../../../common/k8s-api/selected-filter-namespaces.injectable";
+import { ItemListLayoutContent } from "./content";
+import { ItemListLayoutFilters } from "./filters";
+import { ItemListLayoutHeader } from "./header";
+import { PageFiltersList } from "./page-filters/list";
+import { FilterType } from "./page-filters/store";
+import pageFiltersStoreInjectable from "./page-filters/store.injectable";
+import itemListLayoutStorageInjectable from "./storage.injectable";
+
+import type { ItemObject, TableCellProps } from "@freelensapp/list-layout";
+import type { IClassName, SingleOrMany, StrictReactNode } from "@freelensapp/utilities";
+
+import type { IComputedValue } from "mobx";
+import type { Primitive } from "type-fest";
+
 import type { SubscribableStore } from "../../kube-watch-api/kube-watch-api";
 import type { StorageLayer } from "../../utils/storage-helper";
 import type { AddRemoveButtonsProps } from "../add-remove-buttons";
 import type { ConfirmDialogParams } from "../confirm-dialog";
 import type { SearchInputUrlProps } from "../input";
 import type { TableProps, TableRowProps, TableSortCallbacks } from "../table";
-import { ItemListLayoutContent } from "./content";
-import { ItemListLayoutFilters } from "./filters";
-import { ItemListLayoutHeader } from "./header";
-import { PageFiltersList } from "./page-filters/list";
 import type { PageFiltersStore } from "./page-filters/store";
-import { FilterType } from "./page-filters/store";
-import pageFiltersStoreInjectable from "./page-filters/store.injectable";
-import itemListLayoutStorageInjectable from "./storage.injectable";
 
-export type SearchFilter<I extends ItemObject> = (item: I) => SingleOrMany<string | number | undefined | null>;
-export type SearchFilters<I extends ItemObject> = Record<string, SearchFilter<I>>;
-export type ItemsFilter<I extends ItemObject> = (items: I[]) => I[];
-export type ItemsFilters<I extends ItemObject> = Record<string, ItemsFilter<I>>;
+export type ListLayoutSearchFilter<I extends ItemObject> = (
+  item: I,
+) => SingleOrMany<string | number | undefined | null>;
+export type ListLayoutSearchFilters<I extends ItemObject> = Record<string, ListLayoutSearchFilter<I>>;
+export type ListLayoutItemsFilter<I extends ItemObject> = (items: I[]) => I[];
+export type ListLayoutItemsFilters<I extends ItemObject> = Record<string, ListLayoutItemsFilter<I>>;
 
 export interface HeaderPlaceholders {
   title?: StrictReactNode;
@@ -91,9 +96,8 @@ export type ItemListLayoutProps<Item extends ItemObject, PreLoadStores extends b
   dependentStores?: SubscribableStore[];
   preloadStores?: boolean;
   hideFilters?: boolean;
-  searchFilters?: SearchFilter<Item>[];
-  /** @deprecated */
-  filterItems?: ItemsFilter<Item>[];
+  searchFilters?: ListLayoutSearchFilter<Item>[];
+  filterItems?: ListLayoutItemsFilter<Item>[];
 
   // header (title, filtering, searching, etc.)
   showHeader?: boolean;
@@ -133,7 +137,7 @@ export type ItemListLayoutProps<Item extends ItemObject, PreLoadStores extends b
    */
   failedToLoadMessage?: StrictReactNode;
 
-  filterCallbacks?: ItemsFilters<Item>;
+  filterCallbacks?: ListLayoutItemsFilters<Item>;
   "data-testid"?: string;
 } & (PreLoadStores extends true
   ? {
@@ -235,7 +239,7 @@ class NonInjectedItemListLayout<I extends ItemObject, PreLoadStores extends bool
     return <PageFiltersList filters={filters} />;
   }
 
-  private filterCallbacks: ItemsFilters<I> = {
+  private filterCallbacks: ListLayoutItemsFilters<I> = {
     [FilterType.SEARCH]: (items) => {
       const { searchFilters = [] } = this.props;
       const search = this.props.pageFiltersStore.getValues(FilterType.SEARCH)[0] || "";
@@ -259,7 +263,7 @@ class NonInjectedItemListLayout<I extends ItemObject, PreLoadStores extends bool
 
   @computed get items() {
     const filterGroups = groupBy(this.filters, ({ type }) => type);
-    const filterItems: ItemsFilter<I>[] = [];
+    const filterItems: ListLayoutItemsFilter<I>[] = [];
 
     for (const [type, filtersGroup] of Object.entries(filterGroups)) {
       const filterCallback = this.filterCallbacks[type] ?? this.props.filterCallbacks?.[type];
@@ -346,7 +350,7 @@ export const ItemListLayout = withInjectables<Dependencies, ItemListLayoutProps<
   props: ItemListLayoutProps<I, PreLoadStores>,
 ) => React.ReactElement;
 
-function applyFilters<I extends ItemObject>(filters: ItemsFilter<I>[], items: I[]): I[] {
+function applyFilters<I extends ItemObject>(filters: ListLayoutItemsFilter<I>[], items: I[]): I[] {
   if (!filters || !filters.length) {
     return items;
   }
