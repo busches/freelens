@@ -351,7 +351,10 @@ export class KubeObjectStore<
     return this.load({ name, namespace });
   }
 
-  protected async createItem(params: { name: string; namespace?: string }, data?: PartialDeep<K>): Promise<K | null> {
+  protected async createItem(
+    params: { name: string; namespace?: string },
+    data?: PartialDeep<K, { recurseIntoArrays: true }>,
+  ): Promise<K | null> {
     return this.api.create(params, data);
   }
 
